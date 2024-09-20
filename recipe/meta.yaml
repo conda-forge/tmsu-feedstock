@@ -26,16 +26,21 @@ build:
     - popd
     - cp -r ./misc/bin/. $PREFIX/bin/  # [unix]
     - chmod -R u+w $(go env GOPATH) && rm -r $(go env GOPATH)  # [unix]
-  number: 0
+  number: 1
 
 requirements:
   build:
-    - {{ compiler('go') }}
+    - {{ stdlib('c') }}  # [unix]
+    - {{ compiler('c') }}  # [unix]
+    - {{ stdlib('m2w64_c') }}  # [win]
+    - {{ compiler('m2w64_c') }}  # [win]
+    - {{ compiler('go-cgo') }}
     - go-licenses
 
 test:
   commands:
     - {{ name }} -V
+    - {{ name }} init
     - which mount.{{ name }}  # [unix]
     - which {{ name }}-fs-merge  # [unix]
     - which {{ name }}-fs-mv  # [unix]
